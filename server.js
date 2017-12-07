@@ -26,9 +26,8 @@ app.use(
   })
 );
 
-app.get('/api/*', (req, res) => {
- res.json({ok: true});
-});
+// setup routes
+app.use(require('./routes/index'));
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
