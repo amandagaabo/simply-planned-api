@@ -1,4 +1,11 @@
- language: node_js
- node_js: node
- services:
-  - mongodb
+language: node_js
+node_js: node
+services:
+- mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: kLfi8xWTEEPgfbt9g13SBMJoin4G1orUh1CP8GaeOODlQvm+GeKrJOfk3bAeDKO0SOzpJw2Gnd6U4DCEIJVZPcNFCR5VysjeoNu3OeKavIbFLQ0OrFL1wJ6qNp9U/tZqnmq5k2gyop+pcjeGKLHiJP8z1PoBYKhtEhZbNojcGfjKIEAcW1RfGNC++M+WAx/DpOMi443ZgOOWqWjWZZaxlWE618GWLMT4QWvcHO3TOwQ8oypUESzI5c3hF+RFRF/kuvO2QwDHZZrHSUTI5s/QTiib8RIRYKdDqGqqDjs3Is+GxH9vTTno5CHjuhnXBJCvKMC+j2ah6xGJ/V9qkT808jWvm7RfS5iKEEPhwVY2BXQfNM5aheDIR/EKGHTo9at0z4VW8DNeM+HCOnjkiKGpc7gUddRCCJuDapIaUNAgjy4QOMIfpQc9mxwWJRPuPGAwyzWoBud42SovHnMbY7jR9Drf23p1y26TmkoEiJGagCrgZbYHioyTStK7fa3dVl4hnltXRNsomw4UgfK5JaYI3YPrUKZsdTmSKJHfI7Fzt+yo3r0GMUC06KYY6uyyplgsAgcHuxI/HsVRxzkx5CZ/b7cCoeyye6kIkqZUNLcvVJw9F6chaVOeS9Os3kauHp5Br/TKwL3VYHw4WfDLzrgt96zJ+ToTmjD65lVfXszdYUQ=
+  app: simply-planned-api
+  on:
+    repo: amandaherschleb/simply-planned-api
