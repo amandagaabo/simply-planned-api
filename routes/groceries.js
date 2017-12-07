@@ -1,13 +1,37 @@
-// bring in model here once it exists
+const Grocery = require('../models/grocery');
 
 exports.list = function (req, res) {
-  res.status(200).json({message: '/groceries route connected'})
+  Grocery
+  .find()
+  .then(groceries => {
+    res.status(200).json( {groceries} )
+  }).catch(err => {
+    console.error(err);
+    res.status(500).json({message: 'Internal server error'});
+  });
+
 };
 
 exports.create = function (req, res) {
-  res.status(200).json({message: '/groceries create route connected'})
+  Grocery
+  .create({
+    user: req.body.user,
+    name: req.body.name
+  })
+  .then( grocery => {
+    res.status(201).json( grocery.apiRepr() )
+  }).catch(err => {
+    console.error(err);
+    res.status(500).json({message: 'Internal server error'});
+  });
 };
 
 exports.delete = function (req, res) {
-  res.status(200).json({message: '/groceries delete route connected'})
+  Grocery
+  .findByIdAndRemove(req.params.id)
+  .then(grocery => {
+    res.status(204).end()
+  }).catch(err => {
+    res.status(500).json({message: 'Internal server error'})
+  });
 };

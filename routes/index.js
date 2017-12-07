@@ -19,7 +19,7 @@ router.post('/meals', meals.update);
 // grocery routes
 router.get('/groceries', groceries.list);
 router.post('/groceries/add', groceries.create);
-router.post('/groceries/:item/delete', groceries.delete);
+router.post('/groceries/:id', groceries.delete);
 
 // catch-all endpoint if client makes request to non-existent endpoint
 router.get('*', function (req, res) {

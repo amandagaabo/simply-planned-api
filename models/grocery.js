@@ -8,12 +8,28 @@ const grocerySchema = mongoose.Schema({
     index: true,
     required: true
   },
-  name: String,
-  checked: Boolean
+  name: {
+    type: String,
+    required: true
+  },
+  checked: {
+    type: Boolean,
+    default: false
+  }
 });
+
+// setup api representation
+grocerySchema.methods.apiRepr = function() {
+  return {
+    id: this._id,
+    user: this.user,
+    name: this.name,
+    checked: this.checked
+  };
+}
 
 // setup mongoose model
 const Grocery = mongoose.model('Grocery', grocerySchema);
 
 // export model
-module.exports = Grocery;
+module.exports = Grocery

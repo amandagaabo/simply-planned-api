@@ -1,4 +1,4 @@
-// bring in model here once it exists
+//const User = require('../models/user');
 
 exports.landingPage = function (req, res) {
   res.status(200).json({message: '/ route connected'})

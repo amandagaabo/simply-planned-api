@@ -1,4 +1,4 @@
-// bring in model here once it exists
+const Meal = require('../models/meal');
 
 exports.mealsPage = function (req, res) {
   res.status(200).json({message: '/meals route connected'})
