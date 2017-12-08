@@ -1,5 +1,7 @@
+'use strict';
+
+// app setup and requires
 require('dotenv').config();
-// setup app
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -7,6 +9,8 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const router = require('./routes/index');
+const passport = require('passport');
+const {localStrategy, jwtStrategy} = require('./config/auth');
 
 // make Mongoose use built in es6 promises
 mongoose.Promise = global.Promise;
@@ -25,6 +29,10 @@ app.use(
     origin: CLIENT_ORIGIN
   })
 );
+
+// setup auth strategies
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 // setup routes
 app.use(router);

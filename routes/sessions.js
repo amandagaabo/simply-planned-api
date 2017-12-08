@@ -1,21 +1,31 @@
-//const User = require('../models/user');
+const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+const {JWT_SECRET, JWT_EXPIRY} = require('../config/config');
 
-exports.landingPage = function (req, res) {
-  res.status(200).json({message: '/ route connected'})
-};
-
-exports.loginPage = function (req, res) {
-  res.status(200).json({message: '/login route connected'})
+const createAuthToken = function(user) {
+  return jwt.sign({user}, JWT_SECRET, {
+    subject: user.email,
+    expiresIn: JWT_EXPIRY,
+    algorithm: 'HS256'
+  });
 };
 
 exports.loginSubmit = function (req, res) {
-  res.status(200).json({message: '/login route connected'})
+  const authToken = createAuthToken(req.user.apiRepr());
+  res.json({authToken});
 };
 
-exports.logout = function (req, res) {
-  res.status(200).json({message: '/logout route connected'})
+exports.refreshToken = function (req, res) {
+  const authToken = createAuthToken(req.user);
+  res.json({authToken});
 };
 
 exports.signUpSubmit = function (req, res) {
-  res.status(200).json({message: '/sign-up route connected'})
+
+
+};
+
+exports.logout = function (req, res) {
+  req.logout();
+  res.status(200).json({message: 'Successfully logged out'});
 };

@@ -1,25 +1,27 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
+const sessions = require('./sessions');
+const meals = require('./meals');
+const groceries = require('./groceries');
 
-const sessions = require('./sessions')
-const meals = require('./meals')
-const groceries = require('./groceries')
+const localAuth = passport.authenticate('local', {session: false});
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
 // session routes
-router.get('/', sessions.landingPage);
 router.post('/sign-up', sessions.signUpSubmit);
-router.get('/login', sessions.loginPage);
-router.post('/login', sessions.loginSubmit);
+router.post('./refresh', jwtAuth, sessions.refreshToken);
+router.post('/login', localAuth, sessions.loginSubmit);
 router.get('/logout', sessions.logout);
 
 // meal routes
-router.get('/meals', meals.mealsPage);
-router.post('/meals/:id', meals.update);
+router.get('/meals', jwtAuth, meals.mealsPage);
+router.post('/meals/:id', jwtAuth, meals.update);
 
 // grocery routes
-router.get('/groceries', groceries.list);
-router.post('/groceries/add', groceries.create);
-router.post('/groceries/:id', groceries.delete);
+router.get('/groceries', jwtAuth, groceries.list);
+router.post('/groceries/add', jwtAuth, groceries.create);
+router.post('/groceries/:id', jwtAuth, groceries.delete);
 
 // catch-all endpoint if client makes request to non-existent endpoint
 router.get('*', function (req, res) {
