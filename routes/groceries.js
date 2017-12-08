@@ -2,7 +2,7 @@ const Grocery = require('../models/grocery');
 
 exports.list = function (req, res) {
   Grocery
-  .find()
+  .find( {user: req.body.user} )
   .then(groceries => {
     res.status(200).json( {groceries} )
   }).catch(err => {

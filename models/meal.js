@@ -9,7 +9,7 @@ const mealSchema = mongoose.Schema({
     required: true
   },
   date: Date,
-  breakrast: String,
+  breakfast: String,
   lunch: String,
   dinner: String
 });

@@ -14,7 +14,7 @@ router.get('/logout', sessions.logout);
 
 // meal routes
 router.get('/meals', meals.mealsPage);
-router.post('/meals', meals.update);
+router.post('/meals/:id', meals.update);
 
 // grocery routes
 router.get('/groceries', groceries.list);

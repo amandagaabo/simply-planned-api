@@ -2,24 +2,24 @@ require('dotenv').config();
 // setup app
 const express = require('express');
 const app = express();
-
-// setup mongoose
 const mongoose = require('mongoose');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const router = require('./routes/index');
+
 // make Mongoose use built in es6 promises
 mongoose.Promise = global.Promise;
 
 const {CLIENT_ORIGIN, PORT, DATABASE_URL} = require('./config/config');
 
 // log the http layer middleware
-const morgan = require('morgan');
 app.use(morgan('common'));
 
 // use body parser middleware
-const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
 // use cors middleware
-const cors = require('cors');
 app.use(
   cors({
     origin: CLIENT_ORIGIN
@@ -27,7 +27,7 @@ app.use(
 );
 
 // setup routes
-app.use(require('./routes/index'));
+app.use(router);
 
 
 // setup server
@@ -59,10 +59,10 @@ function closeServer() {
      return new Promise((resolve, reject) => {
        console.log('Closing server');
        server.close(err => {
-           if (err) {
-               return reject(err);
-           }
-           resolve();
+         if (err) {
+            return reject(err);
+         }
+         resolve();
        });
      });
   });

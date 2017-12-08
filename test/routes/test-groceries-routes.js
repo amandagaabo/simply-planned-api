@@ -6,13 +6,13 @@ const mongoose = require('mongoose');
 
 const {app, runServer, closeServer} = require('../../server');
 const Grocery = require('../../models/grocery');
-const {DATABASE_URL} = require('../../config/config');
 
 const seedData = [
   { user: "59f7734fd1a16c0012dd20f3", name: "apples", checked: false },
   { user: "59f7734fd1a16c0012dd20f3", name: "bananas", checked: false },
   { user: "59f7734fd1a16c0012dd20f3", name: "chicken", checked: true },
-  { user: "59f7734fd1a16c0012dd20f3", name: "pasta", checked: false }
+  { user: "59f7734fd1a16c0012dd20f3", name: "pasta", checked: false },
+  { user: "59f7734fd1a16c0012dd20f1", name: "pasta", checked: false }
 ]
 
 function seedGroceryData() {
@@ -26,7 +26,7 @@ function clearDB() {
 
 describe('Groceries Routes', function() {
   before(function() {
-   return runServer(DATABASE_URL)
+   return runServer()
    .then(function() {
      return clearDB()
    });
@@ -44,9 +44,10 @@ describe('Groceries Routes', function() {
     return closeServer();
   })
 
-  it('GET requests to /groceries should return all groceries', function() {
+  it('GET requests to /groceries should return all groceries for the user', function() {
     return chai.request(app)
       .get('/groceries')
+      .send( {user: "59f7734fd1a16c0012dd20f3"} )
       .then(function(res) {
         res.should.have.status(200);
         res.should.be.json;
@@ -55,7 +56,7 @@ describe('Groceries Routes', function() {
   });
 
   it('POST request to /groceries/add should respond with the new grocery item', function() {
-    const newGrocery = {name: "candy canes", user: "59f7734fd1a16c0012dd20f2"}
+    const newGrocery = {name: "candy canes", user: "59f7734fd1a16c0012dd20f3"}
 
     return chai.request(app)
       .post('/groceries/add')
