@@ -50,7 +50,8 @@ const jwtStrategy = new JwtStrategy(
     // only allow HS256 tokens - the same as the ones we issue
     algorithms: ['HS256']
   },
-  (payload, done) => {
+  function(payload, done) {
+    console.log('jwt strategy function', payload)
     done(null, payload.user);
   }
 );

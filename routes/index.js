@@ -6,12 +6,12 @@ const meals = require('./meals');
 const groceries = require('./groceries');
 
 const localAuth = passport.authenticate('local', {session: false});
-const jwtAuth = passport.authenticate('jwt', { session: false });
+const jwtAuth = passport.authenticate('jwt', {session: false});
 
 // session routes
 router.post('/sign-up', sessions.signUpSubmit);
-router.post('./refresh', jwtAuth, sessions.refreshToken);
 router.post('/login', localAuth, sessions.loginSubmit);
+router.post('/refresh', jwtAuth, sessions.refreshToken);
 router.get('/logout', sessions.logout);
 
 // meal routes

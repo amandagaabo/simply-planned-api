@@ -31,6 +31,7 @@ app.use(
 );
 
 // setup auth strategies
+app.use(passport.initialize());
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
