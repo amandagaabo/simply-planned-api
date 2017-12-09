@@ -8,18 +8,22 @@ const User = require('../../models/user');
 const should = chai.should();
 chai.use(chaiHttp);
 
+function clearDB() {
+  return User.remove({})
+}
+
 describe('Sessions Routes', function() {
+  let userId;
   const email = 'john@gmail.com';
   const password = 'fakepassword123';
   const firstName = 'john';
   const lastName = 'smith';
 
   before(function () {
-    return runServer();
-  });
-
-  after(function () {
-    return closeServer();
+    return runServer()
+    .then(function() {
+      return clearDB()
+    })
   });
 
   beforeEach(function() {
@@ -30,17 +34,25 @@ describe('Sessions Routes', function() {
         firstName,
         lastName
       })
+      .then(function(res) {
+        userId = res._id;
+      })
     );
   });
 
   afterEach(function () {
-    return User.remove({});
+    return clearDB();
+  });
+
+  after(function () {
+    return closeServer();
   });
 
   describe('POST requests to /login', function () {
     it('should fail with no credentials ', function() {
       return chai.request(app)
         .post('/login')
+        .send({email:"", password:""})
         .then(function() {
           should.fail(null, null, 'Request should not succeed')
         })
@@ -97,11 +109,10 @@ describe('Sessions Routes', function() {
           const payload = jwt.verify(token, JWT_SECRET, {
             algorithm: ['HS256']
           });
-          payload.user.should.deep.equal({
-            email,
-            firstName,
-            lastName
-          });
+          payload.user.id.should.equal(`${userId}`);
+          payload.user.email.should.equal(email);
+          payload.user.firstName.should.equal(firstName);
+          payload.user.lastName.should.equal(lastName);
         });
     });
 
@@ -234,13 +245,41 @@ describe('Sessions Routes', function() {
       });
   });
 
-  it.skip('POST requests to /sign-up should respond with status 200', function() {
+  it('POST requests to /sign-up should create a new user', function() {
+    const newEmail = "user2@gmail.com"
+    const newPassword = "Password123"
+    const newFirstName = "Jane"
+    const newLastName = "Doe"
+
     return chai.request(app)
       .post('/sign-up')
-      .then(function(res) {
+      .send({
+        email: newEmail,
+        password: newPassword,
+        firstName: newFirstName,
+        lastName: newLastName
+      })
+      .then(res => {
         res.should.have.status(200);
-        res.should.be.json;
-      });
+        res.body.should.be.an('object');
+        res.body.user.should.include.keys(
+          'email',
+          'firstName',
+          'lastName'
+        );
+        res.body.user.email.should.equal(newEmail);
+        res.body.user.firstName.should.equal(newFirstName);
+        res.body.user.lastName.should.equal(newLastName);
+        return User.findOne({
+          email: newEmail
+        });
+      })
+      .then(user => {
+        user.should.not.be.null;
+        user.firstName.should.equal(newFirstName);
+        user.lastName.should.equal(newLastName);
+        user.password.should.equal(newPassword);
+      })
   });
 
 });

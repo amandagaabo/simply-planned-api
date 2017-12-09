@@ -1,4 +1,3 @@
-'use strict';
 const {Strategy: LocalStrategy} = require('passport-local');
 
 // Assigns the Strategy export to the name JwtStrategy using object destructuring
@@ -51,7 +50,6 @@ const jwtStrategy = new JwtStrategy(
     algorithms: ['HS256']
   },
   function(payload, done) {
-    console.log('jwt strategy function', payload)
     done(null, payload.user);
   }
 );

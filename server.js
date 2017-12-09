@@ -1,5 +1,3 @@
-'use strict';
-
 // app setup and requires
 require('dotenv').config();
 const express = require('express');
@@ -9,13 +7,12 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const router = require('./routes/index');
+const {CLIENT_ORIGIN, PORT, DATABASE_URL} = require('./config/config');
 const passport = require('passport');
 const {localStrategy, jwtStrategy} = require('./config/auth');
 
 // make Mongoose use built in es6 promises
 mongoose.Promise = global.Promise;
-
-const {CLIENT_ORIGIN, PORT, DATABASE_URL} = require('./config/config');
 
 // log the http layer middleware
 app.use(morgan('common'));
@@ -44,6 +41,7 @@ let server;
 
 // this function connects to the database, then starts the server
 function runServer(databaseUrl=DATABASE_URL, port=PORT) {
+  console.log('database', databaseUrl)
   return new Promise((resolve, reject) => {
     mongoose.connect(databaseUrl, {useMongoClient: true}, err => {
       if (err) {

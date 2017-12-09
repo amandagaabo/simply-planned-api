@@ -1,11 +1,15 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const should = chai.should();
-chai.use(chaiHttp);
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
+const {JWT_SECRET} = require('../../config/config');
 const {app, runServer, closeServer} = require('../../server');
 const Meal = require('../../models/meal');
+const User = require('../../models/user');
+
+const should = chai.should();
+chai.use(chaiHttp);
 
 const seedData = [
   {
@@ -56,6 +60,30 @@ const seedData = [
   }
 ]
 
+// new user data
+let userId;
+const email = 'john@gmail.com';
+const password = 'fakepassword123';
+const firstName = 'john';
+const lastName = 'smith';
+
+const token = jwt.sign(
+  {
+    user: {
+      email,
+      firstName,
+      lastName
+    }
+  },
+  JWT_SECRET,
+  {
+    algorithm: 'HS256',
+    subject: email,
+    expiresIn: '7d'
+  }
+);
+
+
 function seedMealData() {
   return Meal.insertMany(seedData);
 }
@@ -63,6 +91,9 @@ function seedMealData() {
 // function to clear database
 function clearDB() {
   return Meal.remove({})
+  .then(function() {
+    return User.remove({})
+  })
 }
 
 describe('Meals Routes', function() {
@@ -74,7 +105,20 @@ describe('Meals Routes', function() {
   });
 
   beforeEach(function() {
-    return seedMealData();
+    return seedMealData()
+    .then(function() {
+      return User.hashPassword(password).then(password =>
+        User.create({
+          email,
+          password,
+          firstName,
+          lastName
+        })
+        .then(function (res) {
+          userId = res.id;
+        })
+      );
+    });
   });
 
   afterEach(function() {
@@ -88,6 +132,7 @@ describe('Meals Routes', function() {
   it('GET requests to /meals should respond with meals between query startDate and endDate', function() {
     return chai.request(app)
       .get('/meals?startDate=2017-12-03&endDate=2017-12-09')
+      .set('authorization', `Bearer ${token}`)
       .send( {user: "59f7734fd1a16c0012dd20f3"} )
       .then(function(res) {
         res.should.have.status(200);
@@ -108,6 +153,7 @@ describe('Meals Routes', function() {
 
         return chai.request(app)
           .post(`/meals/${meal.id}`)
+          .set('authorization', `Bearer ${token}`)
           .send(updateData);
       })
       .then(function(res) {
