@@ -119,7 +119,7 @@ describe('Sessions Routes', function() {
   });
 
   describe('POST requests to /refresh', function () {
-    it('Should reject requests with no credentials', function () {
+    it('should reject requests with no credentials', function () {
       return chai.request(app)
         .post('/refresh')
         .then(function() {
@@ -134,7 +134,7 @@ describe('Sessions Routes', function() {
         });
     });
 
-    it('Should reject requests with an invalid token', function () {
+    it('should reject requests with an invalid token', function () {
       const token = jwt.sign(
         {
           email,
@@ -164,7 +164,7 @@ describe('Sessions Routes', function() {
         });
     });
 
-    it('Should reject requests with an expired token', function () {
+    it('should reject requests with an expired token', function () {
       const token = jwt.sign(
         {
           user: {
@@ -197,7 +197,7 @@ describe('Sessions Routes', function() {
         });
     });
 
-    it('Should return a valid auth token with a new expiry date on successful refresh', function () {
+    it('should return a valid auth token with a new expiry date on successful refresh', function () {
       const token = jwt.sign(
         {
           user: {
@@ -245,41 +245,57 @@ describe('Sessions Routes', function() {
       });
   });
 
-  it('POST requests to /sign-up should create a new user', function() {
-    const newEmail = "user2@gmail.com"
-    const newPassword = "Password123"
-    const newFirstName = "Jane"
-    const newLastName = "Doe"
+  describe('POST requests to /sign-up', function() {
+    it.skip('should fail with email that is already in use', function() {
+      return chai.request(app)
+        .post('/sign-up')
+        .send({
+          email,
+          password,
+          firstName,
+          lastName
+        })
+        .then(function() {
+          should.error()
+        })
+    });
 
-    return chai.request(app)
-      .post('/sign-up')
-      .send({
-        email: newEmail,
-        password: newPassword,
-        firstName: newFirstName,
-        lastName: newLastName
-      })
-      .then(res => {
-        res.should.have.status(200);
-        res.body.should.be.an('object');
-        res.body.user.should.include.keys(
-          'email',
-          'firstName',
-          'lastName'
-        );
-        res.body.user.email.should.equal(newEmail);
-        res.body.user.firstName.should.equal(newFirstName);
-        res.body.user.lastName.should.equal(newLastName);
-        return User.findOne({
-          email: newEmail
-        });
-      })
-      .then(user => {
-        user.should.not.be.null;
-        user.firstName.should.equal(newFirstName);
-        user.lastName.should.equal(newLastName);
-        user.password.should.equal(newPassword);
-      })
-  });
+    it('should create new user on successful submit', function() {
+      const newEmail = "user2@gmail.com"
+      const newPassword = "Password123"
+      const newFirstName = "Jane"
+      const newLastName = "Doe"
+
+      return chai.request(app)
+        .post('/sign-up')
+        .send({
+          email: newEmail,
+          password: newPassword,
+          firstName: newFirstName,
+          lastName: newLastName
+        })
+        .then(res => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.user.should.include.keys(
+            'email',
+            'firstName',
+            'lastName'
+          );
+          res.body.user.email.should.equal(newEmail);
+          res.body.user.firstName.should.equal(newFirstName);
+          res.body.user.lastName.should.equal(newLastName);
+          return User.findOne({
+            email: newEmail
+          });
+        })
+        .then(user => {
+          user.should.not.be.null;
+          user.firstName.should.equal(newFirstName);
+          user.lastName.should.equal(newLastName);
+          user.password.should.equal(newPassword);
+        })
+    });
+  })
 
 });
