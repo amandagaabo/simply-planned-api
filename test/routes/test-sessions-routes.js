@@ -265,6 +265,7 @@ describe('Sessions Routes', function() {
       const newPassword = "Password123"
       const newFirstName = "Jane"
       const newLastName = "Doe"
+      let user;
 
       return chai.request(app)
         .post('/sign-up')
@@ -277,24 +278,27 @@ describe('Sessions Routes', function() {
         .then(res => {
           res.should.have.status(201);
           res.body.should.be.an('object');
-          res.body.user.should.include.keys(
+          res.body.should.include.keys(
             'email',
             'firstName',
             'lastName'
           );
-          res.body.user.email.should.equal(newEmail);
-          res.body.user.firstName.should.equal(newFirstName);
-          res.body.user.lastName.should.equal(newLastName);
+          res.body.email.should.equal(newEmail);
+          res.body.firstName.should.equal(newFirstName);
+          res.body.lastName.should.equal(newLastName);
           return User.findOne({
             email: newEmail
           });
         })
-        .then(user => {
+        .then(_user => {
+          user=_user
           user.should.not.be.null;
           user.firstName.should.equal(newFirstName);
           user.lastName.should.equal(newLastName);
-          user.password.should.equal(newPassword);
+          // password should be hashed so it should not equal the submitted password
+          user.password.should.not.equal(newPassword);
         })
+
     });
   })
 
