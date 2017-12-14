@@ -1,9 +1,13 @@
 const Grocery = require('../models/grocery');
 
 exports.list = function (req, res) {
+  const user = req.user.id
+
   Grocery
-  .find( {user: req.body.user} )
-  .then(groceries => {
+  .find( {user} )
+  .then(_groceries => {
+    const groceries = _groceries.map(grocery => grocery.apiRepr())
+
     res.status(200).json( {groceries} )
   }).catch(err => {
     console.error(err);
@@ -13,10 +17,15 @@ exports.list = function (req, res) {
 };
 
 exports.create = function (req, res) {
+  const user = req.user.id;
+  const name = req.body.itemName;
+  const checked = false;
+
   Grocery
   .create({
-    user: req.body.user,
-    name: req.body.name
+    user,
+    name,
+    checked
   })
   .then( grocery => {
     res.status(201).json( grocery.apiRepr() )

@@ -23,7 +23,6 @@ const grocerySchema = mongoose.Schema({
 grocerySchema.methods.apiRepr = function() {
   return {
     id: this._id,
-    user: this.user,
     name: this.name,
     checked: this.checked
   };

@@ -98,7 +98,7 @@ function clearDB() {
 
 describe('Meals Routes', function() {
   before(function() {
-   return runServer()
+   return runServer(databaseUrl='mongodb://localhost/simply-planned-test')
    .then(function() {
      return clearDB()
    });

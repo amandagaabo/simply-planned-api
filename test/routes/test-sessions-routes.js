@@ -20,7 +20,7 @@ describe('Sessions Routes', function() {
   const lastName = 'smith';
 
   before(function () {
-    return runServer()
+    return runServer(databaseUrl='mongodb://localhost/simply-planned-test')
     .then(function() {
       return clearDB()
     })
