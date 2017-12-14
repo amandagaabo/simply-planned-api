@@ -35,6 +35,25 @@ exports.create = function (req, res) {
   });
 };
 
+
+exports.update = function (req, res) {
+  const itemID = req.body.itemID;
+  const checked = !req.body.checked;
+
+  Grocery
+  .findById(itemID)
+  .then( grocery => {
+    grocery.checked = checked;
+    return grocery.save()
+  })
+  .then( grocery => {
+    res.status(201).json( grocery.apiRepr() )
+  }).catch(err => {
+    console.error(err);
+    res.status(500).json({message: 'Internal server error'});
+  });
+};
+
 exports.delete = function (req, res) {
   Grocery
   .findByIdAndRemove(req.params.id)
