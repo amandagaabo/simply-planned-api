@@ -275,7 +275,7 @@ describe('Sessions Routes', function() {
           lastName: newLastName
         })
         .then(res => {
-          res.should.have.status(200);
+          res.should.have.status(201);
           res.body.should.be.an('object');
           res.body.user.should.include.keys(
             'email',
