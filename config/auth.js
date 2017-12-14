@@ -17,6 +17,7 @@ const localStrategy = new LocalStrategy({
       .then(_user => {
         user = _user;
         if (!user) {
+          console.log('no user, reject promise')
           return Promise.reject({
             reason: 'LoginError',
             message: 'Incorrect email or password'
