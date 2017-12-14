@@ -12,7 +12,6 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 router.post('/sign-up', sessions.signUpSubmit);
 router.post('/login', localAuth, sessions.loginSubmit);
 router.post('/refresh', jwtAuth, sessions.refreshToken);
-router.get('/logout', sessions.logout);
 
 // meal routes
 router.get('/meals', jwtAuth, meals.mealsPage);
