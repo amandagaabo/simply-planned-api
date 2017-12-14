@@ -55,10 +55,12 @@ exports.update = function (req, res) {
 };
 
 exports.delete = function (req, res) {
+  const userID = req.user.id
+
   Grocery
-  .findByIdAndRemove(req.params.id)
-  .then(grocery => {
-    res.status(204).end()
+  .remove({user: userID, checked: true})
+  .then(() => {
+    res.status(204).json({message: 'checked items removed'})
   }).catch(err => {
     res.status(500).json({message: 'Internal server error'})
   });
