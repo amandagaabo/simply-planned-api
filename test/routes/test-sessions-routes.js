@@ -237,14 +237,6 @@ describe('Sessions Routes', function() {
     });
   });
 
-  it('GET requests to /logout should respond with status 200', function() {
-    return chai.request(app)
-      .get('/logout')
-      .then(function(res) {
-        res.should.have.status(200);
-      });
-  });
-
   describe('POST requests to /sign-up', function() {
     it.skip('should fail with email that is already in use', function() {
       return chai.request(app)
