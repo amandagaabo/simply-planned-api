@@ -15,7 +15,7 @@ router.post('/refresh', jwtAuth, sessions.refreshToken);
 
 // meal routes
 router.get('/meals', jwtAuth, meals.mealsPage);
-router.post('/meals/:id', jwtAuth, meals.update);
+router.post('/meals/update', jwtAuth, meals.update);
 
 // grocery routes
 router.get('/groceries', jwtAuth, groceries.list);
