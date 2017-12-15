@@ -12,13 +12,17 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 // grocery data
-const seedData = [
-  { user: "59f7734fd1a16c0012dd20f3", name: "apples", checked: false },
-  { user: "59f7734fd1a16c0012dd20f3", name: "bananas", checked: false },
-  { user: "59f7734fd1a16c0012dd20f3", name: "chicken", checked: true },
-  { user: "59f7734fd1a16c0012dd20f3", name: "pasta", checked: false },
-  { user: "59f7734fd1a16c0012dd20f1", name: "pasta", checked: false }
-]
+function seedData(userID) {
+  return
+  [
+    { user: userID, name: "apples", checked: false },
+    { user: userID, name: "bananas", checked: false },
+    { user: userID, name: "chicken", checked: true },
+    { user: userID, name: "pasta", checked: false },
+    // this should be different to test only getting current user groceries
+    { user: "59f7734fd1a16c0012dd20f1", name: "pasta", checked: false }
+  ]
+}
 // new user data
 let userId;
 const email = 'john@gmail.com';

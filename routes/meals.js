@@ -3,7 +3,7 @@ const Meal = require('../models/meal');
 exports.mealsPage = function (req, res) {
   Meal
   .find({
-    user: req.body.user,
+    user: req.user.id,
     date: {
       $gte: req.query.startDate,
       $lte: req.query.endDate
@@ -11,6 +11,7 @@ exports.mealsPage = function (req, res) {
   })
   .sort({date: 1})
   .then(meals => {
+    console.log('meals found:', meals)
     res.status(200).json( {meals} )
   }).catch(err => {
     console.error(err);
