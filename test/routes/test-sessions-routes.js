@@ -20,7 +20,7 @@ describe('Sessions Routes', function() {
   const lastName = 'smith';
 
   before(function () {
-    return runServer()
+    return runServer(databaseUrl='mongodb://localhost/simply-planned-test')
     .then(function() {
       return clearDB()
     })
@@ -237,14 +237,6 @@ describe('Sessions Routes', function() {
     });
   });
 
-  it('GET requests to /logout should respond with status 200', function() {
-    return chai.request(app)
-      .get('/logout')
-      .then(function(res) {
-        res.should.have.status(200);
-      });
-  });
-
   describe('POST requests to /sign-up', function() {
     it.skip('should fail with email that is already in use', function() {
       return chai.request(app)
@@ -265,6 +257,7 @@ describe('Sessions Routes', function() {
       const newPassword = "Password123"
       const newFirstName = "Jane"
       const newLastName = "Doe"
+      let user;
 
       return chai.request(app)
         .post('/sign-up')
@@ -275,26 +268,29 @@ describe('Sessions Routes', function() {
           lastName: newLastName
         })
         .then(res => {
-          res.should.have.status(200);
+          res.should.have.status(201);
           res.body.should.be.an('object');
-          res.body.user.should.include.keys(
+          res.body.should.include.keys(
             'email',
             'firstName',
             'lastName'
           );
-          res.body.user.email.should.equal(newEmail);
-          res.body.user.firstName.should.equal(newFirstName);
-          res.body.user.lastName.should.equal(newLastName);
+          res.body.email.should.equal(newEmail);
+          res.body.firstName.should.equal(newFirstName);
+          res.body.lastName.should.equal(newLastName);
           return User.findOne({
             email: newEmail
           });
         })
-        .then(user => {
+        .then(_user => {
+          user=_user
           user.should.not.be.null;
           user.firstName.should.equal(newFirstName);
           user.lastName.should.equal(newLastName);
-          user.password.should.equal(newPassword);
+          // password should be hashed so it should not equal the submitted password
+          user.password.should.not.equal(newPassword);
         })
+
     });
   })
 
