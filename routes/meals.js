@@ -28,7 +28,6 @@ exports.update = function (req, res) {
     .find({user, date})
     .then( meal => {
       if (meal.length === 1) {
-        console.log('meal to be updated in route')
         meal[0][mealName] = mealItem;
         return meal[0].save()
       }

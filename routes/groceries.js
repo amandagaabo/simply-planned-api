@@ -2,7 +2,6 @@ const Grocery = require('../models/grocery');
 
 exports.list = function (req, res) {
   const user = req.user.id
-  console.log('user id from req', user)
 
   Grocery
   .find( {user} )

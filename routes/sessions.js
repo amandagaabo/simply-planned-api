@@ -94,7 +94,6 @@ exports.signUpSubmit = function (req, res) {
   .count()
   .then(count => {
     if (count > 0) {
-      console.log('user found:', count)
       // reject if there is an existing user with the same email
       return Promise.reject({
         code: 422,

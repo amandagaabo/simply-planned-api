@@ -116,7 +116,6 @@ mongoose.connect(DATABASE_URL, {useMongoClient: true}, err => {
     return Meal.create(meals)
   })
   .then(() => {
-    console.log('database seeded')
     // exit script, return zero to say it worked with no errors
     process.exit(0)
   })
