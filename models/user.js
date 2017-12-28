@@ -24,7 +24,7 @@ const UserSchema = mongoose.Schema({
   lastName: { type: String, default: '' }
 });
 
-UserSchema.methods.apiRepr = () => {
+UserSchema.methods.apiRepr = function () {
   return {
     id: this._id,
     email: this.email || '',
@@ -33,11 +33,11 @@ UserSchema.methods.apiRepr = () => {
   };
 };
 
-UserSchema.methods.validatePassword = (password) => {
+UserSchema.methods.validatePassword = function (password) {
   return bcrypt.compare(password, this.password);
 };
 
-UserSchema.statics.hashPassword = (password) => {
+UserSchema.statics.hashPassword = function (password) {
   return bcrypt.hash(password, SALT_WORK_FACTOR);
 };
 

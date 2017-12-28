@@ -3,6 +3,9 @@
     "rules": {
       "comma-dangle": "off",
       "arrow-body-style": "off",
-      "no-underscore-dangle": "off"
+      "no-underscore-dangle": "off",
+      "prefer-promise-reject-errors": "off",
+      "no-console": "off",
+      "no-param-reassign": "off"
     }
 }

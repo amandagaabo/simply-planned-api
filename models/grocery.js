@@ -21,7 +21,7 @@ const grocerySchema = mongoose.Schema({
 });
 
 // setup api representation
-grocerySchema.methods.apiRepr = () => {
+grocerySchema.methods.apiRepr = function () {
   return {
     id: this._id,
     name: this.name,

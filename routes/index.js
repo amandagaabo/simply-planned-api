@@ -1,12 +1,12 @@
 const express = require('express');
-const router = express.Router();
 const passport = require('passport');
 const sessions = require('./sessions');
 const meals = require('./meals');
 const groceries = require('./groceries');
 
-const localAuth = passport.authenticate('local', {session: false});
-const jwtAuth = passport.authenticate('jwt', {session: false});
+const router = express.Router();
+const localAuth = passport.authenticate('local', { session: false });
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
 // session routes
 router.post('/sign-up', sessions.signUpSubmit);
@@ -24,8 +24,8 @@ router.post('/groceries/update', jwtAuth, groceries.update);
 router.post('/groceries/delete', jwtAuth, groceries.delete);
 
 // catch-all endpoint if client makes request to non-existent endpoint
-router.get('*', function (req, res) {
-  res.status(404).json({message: 'Not Found'})
+router.get('*', (req, res) => {
+  res.status(404).json({ message: 'Not Found' });
 });
 
 module.exports = router;

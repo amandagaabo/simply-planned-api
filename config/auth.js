@@ -1,20 +1,21 @@
-const {Strategy: LocalStrategy} = require('passport-local');
+const { Strategy: LocalStrategy } = require('passport-local');
 
 // Assigns the Strategy export to the name JwtStrategy using object destructuring
-const {Strategy: JwtStrategy, ExtractJwt} = require('passport-jwt');
+const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 
 const User = require('./../models/user');
-const {JWT_SECRET} = require('./config');
+const { JWT_SECRET } = require('./config');
 
-const localStrategy = new LocalStrategy({
+const localStrategy = new LocalStrategy(
+  {
     usernameField: 'email',
     passwordField: 'password'
   },
 
   function (email, password, callback) {
     let user;
-    User.findOne({ email: email.toLowerCase()})
-      .then(_user => {
+    User.findOne({ email: email.toLowerCase() })
+      .then((_user) => {
         user = _user;
         if (!user) {
           return Promise.reject({
@@ -24,7 +25,7 @@ const localStrategy = new LocalStrategy({
         }
         return user.validatePassword(password);
       })
-      .then(isValid => {
+      .then((isValid) => {
         if (!isValid) {
           return Promise.reject({
             reason: 'LoginError',
@@ -33,13 +34,14 @@ const localStrategy = new LocalStrategy({
         }
         return callback(null, user);
       })
-      .catch(err => {
+      .catch((err) => {
         if (err.reason === 'LoginError') {
           return callback(null, false, err);
         }
         return callback(err, false);
       });
-});
+  }
+);
 
 const jwtStrategy = new JwtStrategy(
   {
@@ -49,9 +51,10 @@ const jwtStrategy = new JwtStrategy(
     // only allow HS256 tokens - the same as the ones we issue
     algorithms: ['HS256']
   },
-  function(payload, done) {
+
+  (payload, done) => {
     done(null, payload.user);
   }
 );
 
-module.exports = {localStrategy, jwtStrategy};
+module.exports = { localStrategy, jwtStrategy };

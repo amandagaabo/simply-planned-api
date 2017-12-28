@@ -1,6 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const {DATABASE_URL} = require('../config/config');
+const { DATABASE_URL } = require('../config/config');
 const Grocery = require('../models/grocery');
 const User = require('../models/user');
 const Meal = require('../models/meal');
