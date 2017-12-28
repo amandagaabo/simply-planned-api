@@ -6,22 +6,22 @@ const User = require('../models/user');
 const Meal = require('../models/meal');
 
 // make Mongoose use built in es6 promises
-mongoose.Promise = global.Promise
+mongoose.Promise = global.Promise;
 
 // connect to database
-mongoose.connect(DATABASE_URL, {useMongoClient: true}, err => {
+mongoose.connect(DATABASE_URL, { useMongoClient: true }, (err) => {
   if (err) {
-    throw err
+    throw err;
   }
-  console.log('connected to database')
+  console.log('connected to database');
 
-// setup data
+  // setup data
   const groceries = [
-    { user: "59f7734fd1a16c0012dd20f3", name: "apples", checked: false },
-    { user: "59f7734fd1a16c0012dd20f3", name: "bananas", checked: false },
-    { user: "59f7734fd1a16c0012dd20f3", name: "chicken", checked: true },
-    { user: "59f7734fd1a16c0012dd20f3", name: "pasta", checked: false }
-  ]
+    { user: '59f7734fd1a16c0012dd20f3', name: 'apples', checked: false },
+    { user: '59f7734fd1a16c0012dd20f3', name: 'bananas', checked: false },
+    { user: '59f7734fd1a16c0012dd20f3', name: 'chicken', checked: true },
+    { user: '59f7734fd1a16c0012dd20f3', name: 'pasta', checked: false }
+  ];
 
   const meals = [
     {
@@ -72,7 +72,7 @@ mongoose.connect(DATABASE_URL, {useMongoClient: true}, err => {
     }
   ]
 
-   const users = [
+  const users = [
     {
       email: 'john@gmail.com',
       password: 'fakepassword123',
@@ -85,38 +85,38 @@ mongoose.connect(DATABASE_URL, {useMongoClient: true}, err => {
       firstName: 'sally',
       lastName: 'johnson'
     }
-   ]
+  ];
 
 
   User.remove({})
-  .then(() => {
-    return Meal.remove({})
-  })
-  .then(() => {
-    return Grocery.remove({})
-  })
-  .then(() => {
-    // add new users
-    return User.create(users)
-  })
-  .then(() => {
-    // find a user id
-    return User.findOne()
-    .then(user => {
-      // change user ids to one that was added to the db
-      groceries.map(grocery => grocery.user = user._id);
-      meals.map(meal => meal.user = user._id);
-
-      // add new groceries
-      return Grocery.create(groceries)
+    .then(() => {
+      return Meal.remove({});
     })
-  })
-  .then(() => {
-    // add new meals
-    return Meal.create(meals)
-  })
-  .then(() => {
-    // exit script, return zero to say it worked with no errors
-    process.exit(0)
-  })
-})
+    .then(() => {
+      return Grocery.remove({});
+    })
+    .then(() => {
+      // add new users
+      return User.create(users);
+    })
+    .then(() => {
+      // find a user id
+      return User.findOne()
+        .then((user) => {
+          // change user ids to one that was added to the db
+          groceries.map((grocery) => grocery.user = user._id);
+          meals.map((meal) => meal.user = user._id);
+
+          // add new groceries
+          return Grocery.create(groceries);
+        });
+    })
+    .then(() => {
+      // add new meals
+      return Meal.create(meals);
+    })
+    .then(() => {
+      // exit script, return zero to say it worked with no errors
+      process.exit(0);
+    });
+});
