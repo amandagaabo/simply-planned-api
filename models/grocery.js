@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 mongoose.Promise = global.Promise;
 
 // setup schema
@@ -20,16 +21,16 @@ const grocerySchema = mongoose.Schema({
 });
 
 // setup api representation
-grocerySchema.methods.apiRepr = function() {
+grocerySchema.methods.apiRepr = () => {
   return {
     id: this._id,
     name: this.name,
     checked: this.checked
   };
-}
+};
 
 // setup mongoose model
 const Grocery = mongoose.model('Grocery', grocerySchema);
 
 // export model
-module.exports = Grocery
+module.exports = Grocery;

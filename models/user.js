@@ -1,8 +1,9 @@
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
-const SALT_WORK_FACTOR = 10
-const MIN_PASSWORD_LENGTH = 8
-const MAX_PASSWORD_LENGTH = 65
+
+const SALT_WORK_FACTOR = 10;
+const MIN_PASSWORD_LENGTH = 8;
+const MAX_PASSWORD_LENGTH = 65;
 
 mongoose.Promise = global.Promise;
 
@@ -19,11 +20,11 @@ const UserSchema = mongoose.Schema({
     minlength: MIN_PASSWORD_LENGTH,
     maxlength: MAX_PASSWORD_LENGTH
   },
-  firstName: {type: String, default: ''},
-  lastName: {type: String, default: ''}
+  firstName: { type: String, default: '' },
+  lastName: { type: String, default: '' }
 });
 
-UserSchema.methods.apiRepr = function() {
+UserSchema.methods.apiRepr = () => {
   return {
     id: this._id,
     email: this.email || '',
@@ -32,11 +33,11 @@ UserSchema.methods.apiRepr = function() {
   };
 };
 
-UserSchema.methods.validatePassword = function(password) {
+UserSchema.methods.validatePassword = (password) => {
   return bcrypt.compare(password, this.password);
 };
 
-UserSchema.statics.hashPassword = function(password) {
+UserSchema.statics.hashPassword = (password) => {
   return bcrypt.hash(password, SALT_WORK_FACTOR);
 };
 
