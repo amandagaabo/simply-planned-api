@@ -1,32 +1,32 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const jwt = require('jsonwebtoken');
-const {JWT_SECRET} = require('../../config/config');
-const {app, runServer, closeServer} = require('../../server');
+const { JWT_SECRET } = require('../../config/config');
+const { app, runServer, closeServer } = require('../../server');
 const User = require('../../models/user');
 
 const should = chai.should();
 chai.use(chaiHttp);
 
 function clearDB() {
-  return User.remove({})
+  return User.remove({});
 }
 
-describe('Sessions Routes', function() {
+describe('Sessions Routes', () => {
   let userId;
   const email = 'john@gmail.com';
   const password = 'fakepassword123';
   const firstName = 'john';
   const lastName = 'smith';
 
-  before(function () {
+  before(() => {
     return runServer(databaseUrl='mongodb://localhost/simply-planned-test')
-    .then(function() {
-      return clearDB()
-    })
+      .then(() => {
+        return clearDB();
+      });
   });
 
-  beforeEach(function() {
+  beforeEach(() => {
     return User.hashPassword(password).then(password =>
       User.create({
         email,
@@ -34,29 +34,28 @@ describe('Sessions Routes', function() {
         firstName,
         lastName
       })
-      .then(function(res) {
-        userId = res._id;
-      })
-    );
+        .then((res) => {
+          userId = res._id;
+        }));
   });
 
-  afterEach(function () {
+  afterEach(() => {
     return clearDB();
   });
 
-  after(function () {
+  after(() => {
     return closeServer();
   });
 
-  describe('POST requests to /login', function () {
-    it('should fail with no credentials ', function() {
+  describe('POST requests to /login', () => {
+    it('should fail with no credentials ', () => {
       return chai.request(app)
         .post('/login')
-        .send({email:"", password:""})
-        .then(function() {
-          should.fail(null, null, 'Request should not succeed')
+        .send({ email: '', password: '' })
+        .then(() => {
+          should.fail(null, null, 'Request should not succeed');
         })
-        .catch(function(err) {
+        .catch((err) => {
           if (err instanceof chai.AssertionError) {
             throw err;
           }
@@ -65,14 +64,13 @@ describe('Sessions Routes', function() {
         });
     });
 
-    it('should fail with incorrect email', function () {
+    it('should fail with incorrect email', () => {
       return chai.request(app)
         .post('/login')
-        .send({email: 'wrongEmail', password})
+        .send({ email: 'wrongEmail', password })
         .then(() =>
-          should.fail(null, null, 'Request should not succeed')
-        )
-        .catch(err => {
+          should.fail(null, null, 'Request should not succeed'))
+        .catch((err) => {
           if (err instanceof chai.AssertionError) {
             throw err;
           }
@@ -81,14 +79,13 @@ describe('Sessions Routes', function() {
         });
     });
 
-    it('should fail with incorrect password', function () {
+    it('should fail with incorrect password', () => {
       return chai.request(app)
         .post('/login')
-        .send({email, password: 'wrongPassword'})
+        .send({ email, password: 'wrongPassword' })
         .then(() =>
-          should.fail(null, null, 'Request should not succeed')
-        )
-        .catch(err => {
+          should.fail(null, null, 'Request should not succeed'))
+        .catch((err) => {
           if (err instanceof chai.AssertionError) {
             throw err;
           }
@@ -97,11 +94,11 @@ describe('Sessions Routes', function() {
         });
     });
 
-    it('should return a valid auth token on successful login', function () {
+    it('should return a valid auth token on successful login', () => {
       return chai.request(app)
         .post('/login')
-        .send({email, password})
-        .then(res => {
+        .send({ email, password })
+        .then((res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');
           const token = res.body.authToken;
@@ -115,17 +112,16 @@ describe('Sessions Routes', function() {
           payload.user.lastName.should.equal(lastName);
         });
     });
-
   });
 
-  describe('POST requests to /refresh', function () {
-    it('should reject requests with no credentials', function () {
+  describe('POST requests to /refresh', () => {
+    it('should reject requests with no credentials', () => {
       return chai.request(app)
         .post('/refresh')
-        .then(function() {
-          should.fail(null, null, 'Request should not succeed')
+        .then(() => {
+          should.fail(null, null, 'Request should not succeed');
         })
-        .catch(err => {
+        .catch((err) => {
           if (err instanceof chai.AssertionError) {
             throw err;
           }
@@ -134,7 +130,7 @@ describe('Sessions Routes', function() {
         });
     });
 
-    it('should reject requests with an invalid token', function () {
+    it('should reject requests with an invalid token', () => {
       const token = jwt.sign(
         {
           email,
@@ -151,10 +147,10 @@ describe('Sessions Routes', function() {
       return chai.request(app)
         .post('/refresh')
         .set('Authorization', `Bearer ${token}`)
-        .then(function() {
-          should.fail(null, null, 'Request should not succeed')
+        .then(() => {
+          should.fail(null, null, 'Request should not succeed');
         })
-        .catch(err => {
+        .catch((err) => {
           if (err instanceof chai.AssertionError) {
             throw err;
           }
@@ -164,7 +160,7 @@ describe('Sessions Routes', function() {
         });
     });
 
-    it('should reject requests with an expired token', function () {
+    it('should reject requests with an expired token', () => {
       const token = jwt.sign(
         {
           user: {
@@ -184,10 +180,10 @@ describe('Sessions Routes', function() {
       return chai.request(app)
         .post('/refresh')
         .set('authorization', `Bearer ${token}`)
-        .then(function() {
-          should.fail(null, null, 'Request should not succeed')
+        .then(() => {
+          should.fail(null, null, 'Request should not succeed');
         })
-        .catch(err => {
+        .catch((err) => {
           if (err instanceof chai.AssertionError) {
             throw err;
           }
@@ -197,7 +193,7 @@ describe('Sessions Routes', function() {
         });
     });
 
-    it('should return a valid auth token with a new expiry date on successful refresh', function () {
+    it('should return a valid auth token with a new expiry date on successful refresh', () => {
       const token = jwt.sign(
         {
           user: {
@@ -219,7 +215,7 @@ describe('Sessions Routes', function() {
       return chai.request(app)
         .post('/refresh')
         .set('authorization', `Bearer ${token}`)
-        .then(res => {
+        .then((res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');
           const token = res.body.authToken;
@@ -237,8 +233,8 @@ describe('Sessions Routes', function() {
     });
   });
 
-  describe('POST requests to /sign-up', function() {
-    it.skip('should fail with email that is already in use', function() {
+  describe('POST requests to /sign-up', () => {
+    it.skip('should fail with email that is already in use', () => {
       return chai.request(app)
         .post('/sign-up')
         .send({
@@ -247,16 +243,16 @@ describe('Sessions Routes', function() {
           firstName,
           lastName
         })
-        .then(function() {
-          should.error()
-        })
+        .then(() => {
+          should.error();
+        });
     });
 
-    it('should create new user on successful submit', function() {
-      const newEmail = "user2@gmail.com"
-      const newPassword = "Password123"
-      const newFirstName = "Jane"
-      const newLastName = "Doe"
+    it('should create new user on successful submit', () => {
+      const newEmail = 'user2@gmail.com';
+      const newPassword = 'Password123';
+      const newFirstName = 'Jane';
+      const newLastName = 'Doe';
       let user;
 
       return chai.request(app)
@@ -267,7 +263,7 @@ describe('Sessions Routes', function() {
           firstName: newFirstName,
           lastName: newLastName
         })
-        .then(res => {
+        .then((res) => {
           res.should.have.status(201);
           res.body.should.be.an('object');
           res.body.should.include.keys(
@@ -282,16 +278,14 @@ describe('Sessions Routes', function() {
             email: newEmail
           });
         })
-        .then(_user => {
-          user=_user
+        .then((_user) => {
+          user=_user;
           user.should.not.be.null;
           user.firstName.should.equal(newFirstName);
           user.lastName.should.equal(newLastName);
           // password should be hashed so it should not equal the submitted password
           user.password.should.not.equal(newPassword);
-        })
-
+        });
     });
-  })
-
+  });
 });
