@@ -25,52 +25,52 @@ mongoose.connect(DATABASE_URL, { useMongoClient: true }, (err) => {
 
   const meals = [
     {
-      user: "59f7734fd1a16c0012dd20f3",
-      date: "2017-12-03",
-      breakfast: "oatmeal",
-      lunch: "grilled chicken salad",
-      dinner: "burger and sweet potato fries"
+      user: '59f7734fd1a16c0012dd20f3',
+      date: '2017-12-03',
+      breakfast: 'oatmeal',
+      lunch: 'grilled chicken salad',
+      dinner: 'burger and sweet potato fries'
     },
     {
-      user: "59f7734fd1a16c0012dd20f3",
-      date: "2017-12-04",
-      breakfast: "cereal",
-      lunch: "turkey and cheese wrap",
-      dinner: "pasta and red sauce with veggies"
+      user: '59f7734fd1a16c0012dd20f3',
+      date: '2017-12-04',
+      breakfast: 'cereal',
+      lunch: 'turkey and cheese wrap',
+      dinner: 'pasta and red sauce with veggies'
     },
     {
-      user: "59f7734fd1a16c0012dd20f3",
-      date: "2017-12-05",
-      breakfast: "eggs and potatoes",
-      lunch: "spinach and pear salad",
-      dinner: "pork chops and veggies"
+      user: '59f7734fd1a16c0012dd20f3',
+      date: '2017-12-05',
+      breakfast: 'eggs and potatoes',
+      lunch: 'spinach and pear salad',
+      dinner: 'pork chops and veggies'
     },
     {
-      user: "59f7734fd1a16c0012dd20f3",
-      date: "2017-12-06"
+      user: '59f7734fd1a16c0012dd20f3',
+      date: '2017-12-06'
     },
     {
-      user: "59f7734fd1a16c0012dd20f3",
-      date: "2017-12-07",
-      breakfast: "eggs and toast",
-      lunch: "turkey sub and fries",
-      dinner: "grilled cheese and soup"
+      user: '59f7734fd1a16c0012dd20f3',
+      date: '2017-12-07',
+      breakfast: 'eggs and toast',
+      lunch: 'turkey sub and fries',
+      dinner: 'grilled cheese and soup'
     },
     {
-      user: "59f7734fd1a16c0012dd20f3",
-      date: "2017-12-08",
-      breakfast: "cereal",
-      lunch: "ham and swiss wrap",
-      dinner: "chicken fingers and sweet potato fries"
+      user: '59f7734fd1a16c0012dd20f3',
+      date: '2017-12-08',
+      breakfast: 'cereal',
+      lunch: 'ham and swiss wrap',
+      dinner: 'chicken fingers and sweet potato fries'
     },
     {
-      user: "59f7734fd1a16c0012dd20f3",
-      date: "2017-12-09",
-      breakfast: "oatmeal with bananas and walnuts",
-      lunch: "cobb salad",
-      dinner: "turkey and mashed potatoes"
+      user: '59f7734fd1a16c0012dd20f3',
+      date: '2017-12-09',
+      breakfast: 'oatmeal with bananas and walnuts',
+      lunch: 'cobb salad',
+      dinner: 'turkey and mashed potatoes'
     }
-  ]
+  ];
 
   const users = [
     {
@@ -104,8 +104,8 @@ mongoose.connect(DATABASE_URL, { useMongoClient: true }, (err) => {
       return User.findOne()
         .then((user) => {
           // change user ids to one that was added to the db
-          groceries.map((grocery) => grocery.user = user._id);
-          meals.map((meal) => meal.user = user._id);
+          groceries.map(grocery => grocery.user = user._id);
+          meals.map(meal => meal.user = user._id);
 
           // add new groceries
           return Grocery.create(groceries);

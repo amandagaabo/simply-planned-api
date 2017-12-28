@@ -51,7 +51,6 @@ function createToken(userID) {
   );
 }
 
-
 // clear database collections
 function clearDB() {
   return Grocery.remove({})
@@ -62,9 +61,9 @@ function clearDB() {
 
 describe('Groceries Routes', () => {
   before(() => {
-    return runServer(databaseUrl='mongodb://localhost/simply-planned-test')
+    return runServer(databaseUrl = 'mongodb://localhost/simply-planned-test')
       .then(() => {
-        return clearDB()
+        return clearDB();
       });
   });
 
