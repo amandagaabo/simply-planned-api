@@ -64,3 +64,16 @@ exports.delete = (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     });
 };
+
+exports.deleteItem = (req, res) => {
+  console.log(req.params);
+  const { itemID } = req.params;
+  Grocery
+    .findByIdAndRemove(itemID)
+    .then(() => {
+      res.status(204).json({ message: 'item removed', itemID });
+    }).catch((err) => {
+      console.error(err);
+      res.status(500).json({ message: 'Internal server error' });
+    });
+};
