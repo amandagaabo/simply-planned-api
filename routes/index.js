@@ -22,6 +22,7 @@ router.get('/groceries', jwtAuth, groceries.list);
 router.post('/groceries/add', jwtAuth, groceries.create);
 router.post('/groceries/update', jwtAuth, groceries.update);
 router.post('/groceries/delete', jwtAuth, groceries.delete);
+router.post('/groceries/delete/:itemID', jwtAuth, groceries.deleteItem);
 
 // catch-all endpoint if client makes request to non-existent endpoint
 router.get('*', (req, res) => {
